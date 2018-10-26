@@ -11,6 +11,7 @@ struct _cidades {
 struct _rota {
 	int *percurso;
 	int n_cidades;
+	int dist;
 };
 
 /*
@@ -123,3 +124,16 @@ void printar_percurso(rota *R) {
 	}
 	printf(" | %d \n", percorrer_rota())
 }
+
+/*
+Troca duas cidades de lugar na rota dada, para permutação
+*/
+void troca(rota *R, int a, int b){
+	if(b < R->n_cidades){
+		int tmp;
+		tmp = R->percurso[a];
+		R->percurso[a] = R->percurso[b];
+		R->percurso[b] = tmp;
+	}
+}
+	
