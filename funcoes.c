@@ -1,8 +1,8 @@
-#define <stdlib.h>
-#define <stdio.h>
-#define "estruturas.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include "estruturas.h"
 
-#define "funcoes.h"
+#include "funcoes.h"
 
 /*
 Lê informações de um arquivo de nome dado
@@ -20,8 +20,8 @@ cidades *ler_arquivo(char *arquivo) {
 	int n_max = n*(n-1)/2; //Numero maximo de rotas sem repetir
 	
 	//Ler distância de duas cidades do arquivo e guardar no TAD através da função
-	for (int cont = 0; cont < n_max); cont++) {
-		fscanf(arqin, "%d %d %d", &cidade_x, &cidade_y, &dist)
+	for (int cont = 0; cont < n_max; cont++) {
+		fscanf(arqin, "%d %d %d", &cidade_x, &cidade_y, &dist);
 		guardar_distancia(A, cidade_x, cidade_y, dist);
 	}
 	
@@ -29,6 +29,7 @@ cidades *ler_arquivo(char *arquivo) {
 	return(A);
 }
 
+/*
 rota melhor_rota_bf(cidades *A) {
 	//Alocar uma int e uma rota, que guardem o melhor caso
 	int dist_melhor = 0;
@@ -41,7 +42,7 @@ rota melhor_rota_bf(cidades *A) {
 		rota *R_tmp = alocar_rota(n_cidades(A));
 		
 		//Gerar uma rota
-		in = gerar de alguma forma sla
+		in = gerar de alguma forma sla;
 		
 		//Guardar a rota, e percorrer
 		guardar_rota(R_tmp, in);
@@ -60,10 +61,11 @@ rota melhor_rota_bf(cidades *A) {
 	return(R_melhor);
 	
 }
+*/
 
 //encontra todas rotas por uma permutação recursiva
 int permuta(rota *R, int ini, int fim, cidades *A, rota *R_melhor) { //R_melhor entra como argumento para output
-	int i, dist;
+	int i, dist, aux;
 	//Se o inicio for igual ao fim, encontrou uma permutação, então calcula a distancia e retorna
 	if(ini == fim){
 		dist = percorrer_rota(A, R);
@@ -74,9 +76,9 @@ int permuta(rota *R, int ini, int fim, cidades *A, rota *R_melhor) { //R_melhor 
 			troca(R, ini, i); 
 			dist = permuta(R, ini+1, fim, A, R_melhor); 
 			//Se o percurso for melhor que o melhor, atualiza
-			if(dist < R_melhor->dist){
-				R_melhor-> = dist;
-				R_melhor->percurso = R->percurso;
+			if(i == ini) aux = dist;
+			if(dist <= aux){
+				R_melhor = R;
 			}
 			troca(R, ini, i); //volta como estava
 		}

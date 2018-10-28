@@ -1,6 +1,7 @@
-#define <stdlib.h>
+#include <stdlib.h>
+#include <stdio.h>
 
-#define "estruturas.h"
+#include "estruturas.h"
 
 
 struct _cidades {
@@ -11,7 +12,6 @@ struct _cidades {
 struct _rota {
 	int *percurso;
 	int n_cidades;
-	int dist;
 };
 
 /*
@@ -32,7 +32,7 @@ cidades *alocar_cidades(int n) {
 	//Alocar matriz n*n com informações de distância
 	A->matriz = (int **)malloc(sizeof(int)*n);
 	if (A->matriz == NULL) return(NULL);
-	for(i = 0; i < m; i++) {
+	for(i = 0; i < n; i++) {
 		A->matriz[i] = (int *)malloc(sizeof(int)*n);
 		if (A->matriz[i] == NULL) return(NULL);
 	}	
@@ -43,7 +43,7 @@ cidades *alocar_cidades(int n) {
 /*
 Guardar distancia de duas cidades dadas
 */
-void guardar_distancia(cidades *A, int cidade_x, int cidade_y, int dist) {
+void guardar_distancia(cidades *A, int x, int y, int dist) {
 	//Armazenar distância dist da cidade x pra y (E vice-versa)
 	A->matriz[x-1][y-1] = dist;
 	A->matriz[y-1][x-1] = dist;
@@ -88,7 +88,7 @@ void guardar_rota(rota *R, int in[]) {
 	for (int cont = 0; cont < R->n_cidades; cont++)
 		R->percurso[cont] = in[cont];
 	
-	R->percurso[n_cidades] = in[0]; //Colocar a cidade inicial no fim
+	R->percurso[R->n_cidades] = in[0]; //Colocar a cidade inicial no fim
 	
 	return;
 }
@@ -122,7 +122,7 @@ void printar_percurso(rota *R) {
 		if (cont != R->n_cidades - 1)
 			printf("-");
 	}
-	printf(" | %d \n", percorrer_rota())
+	printf(" | %d \n", R->dist);
 }
 
 /*
