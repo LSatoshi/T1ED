@@ -63,24 +63,26 @@ rota melhor_rota_bf(cidades *A) {
 }
 */
 
-//encontra todas rotas por uma permutação recursiva
-int permuta(rota *R, int ini, int fim, cidades *A, rota *R_melhor) { //R_melhor entra como argumento para output
-	int i, dist, aux;
-	//Se o inicio for igual ao fim, encontrou uma permutação, então calcula a distancia e retorna
-	if(ini == fim){
-		dist = percorrer_rota(A, R);
-		return(dist);
-	}
-	else{ 
-		for (i = ini; i <= fim; i++){//troca um elemento, o fixa e chama a função recursivamente
-			troca(R, ini, i); 
-			dist = permuta(R, ini+1, fim, A, R_melhor); 
-			//Se o percurso for melhor que o melhor, atualiza
-			if(i == ini) aux = dist;
-			if(dist <= aux){
-				R_melhor = R;
-			}
-			troca(R, ini, i); //volta como estava
+void *bf_permutacao(cidades *A, rota *R, int ini, int tam, rota *R_best, int dist_best) {
+	if (tam == i) { //Quando terminarmos de gerar uma nova permutação
+		int dist = percorrer_rota(A, R)
+		if (dist < dist_best) {
+			dist_best = dist;
+			free(R_best);
+			R_best = copiar_rota(R);
+			return;
 		}
+	}
+	for (int i = ini; i < tam; i++) {
+		troca(A, R, ini, i);
+		bf_permutacao(A, R, ini+1, tam);
+		troca(A, R, ini, i);
+	}
+	return;
+}
+
+void melhor_rota (cidades *A, int modo) {
+	if (modo == 1) {
+		for (int i = 1; i < n)
 	}
 }

@@ -27,11 +27,6 @@ Retorna um ponteiro para rota
 rota *alocar_rota(int n);
 
 /*
-Armazenamento de rota
-*/
-void guardar_rota(rota *R, int in[]);
-
-/*
 Retorna a distância entre dadas duas cidades
 */
 int distancia_cidades(cidades *A, int cidade_x, int cidade_y);
