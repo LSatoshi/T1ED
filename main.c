@@ -1,22 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "funcoes.c"
+#include "funcoes.h"
 
 int main() {
-	char arquivo[50]; //Nome do arquivo
+	char *arquivo; //Nome do arquivo
+	arquivo = (char*) malloc(sizeof(char)*50);
 	int modo, cidade_inicial;
 	
 	printf("Digite o nome do arquivo a ser lido\n>");
-	gets(arquivo);
+	scanf("%s", arquivo);
 	
 	printf("Digite a cidade inicial\n>");
 	scanf("%d", &cidade_inicial);
 	
 	printf("Escolha o algoritmo:\n");
-	printf("1 - Brute force");
-	printf("2 - Algoritmo por seleção");
+	printf("1 - Brute force\n");
+	printf("2 - Algoritmo por seleção\n");
 	scanf("%d", &modo);
 	
 	resolucao(arquivo, cidade_inicial, modo);
+	return 0;
 }

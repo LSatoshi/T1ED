@@ -15,7 +15,7 @@ rota *gerar_rota_inicial(cidades *A, int cidade_inicial);
 void copiar_rota(rota *in, rota *out);
 int distancia_cidades(cidades *A, int cidade_x, int cidade_y);
 int percorrer_rota (cidades *A, rota *R);
-void printar_rota(rota *R);
+void printar_rota(cidades *A, rota *R);
 void troca(rota *R, int a, int b);
 lista *lista_criar();
 void lista_inserir(lista *L, int item);

@@ -29,7 +29,7 @@ cidades *alocar_cidades(int n) {
 	A->n_cidades = n;
 	
 	//Alocar matriz n*n com informações de distância
-	A->matriz = (int **)malloc(sizeof(int)*n);
+	A->matriz = (int **)malloc(sizeof(int *)*n);
 	if (A->matriz == NULL) return(NULL);
 	for(i = 0; i < n; i++) {
 		A->matriz[i] = (int *)malloc(sizeof(int)*n);
@@ -75,12 +75,12 @@ Retorna um ponteiro para rota
 rota *alocar_rota(int n) {
 	rota *R;
 	
-	//Guardar numero de cidades
-	R->n_cidades = n;
-	
 	//Alocar a struct
 	R = (rota *)malloc(sizeof(rota));
 	if (R == NULL) return(NULL);
+	
+	//Guardar numero de cidades
+	R->n_cidades = n;
 	
 	//Alocar o array percurso, com tamanho +1 para guardar a cidade inicial no fim
 	R->percurso = (int *)malloc(sizeof(int)*n+1);
@@ -95,7 +95,7 @@ Aloca e importa uma rota a partir de um array
 rota *importar_rota(cidades *A, int *in) {
 	rota *R = alocar_rota(A->n_cidades);
 	
-	for (int i = 0; i < n_cidades; i++) {
+	for (int i = 0; i < A->n_cidades; i++) {
 		R->percurso[i] = in[i];
 	}
 	
@@ -110,12 +110,13 @@ rota *gerar_rota_inicial(cidades *A, int cidade_inicial) {
 
 	R->percurso[0] = cidade_inicial; //Colocar cidade inicial na primeira posição
 	
-	j = 1; //Cidade a ser atribuida, a começar pela 1
+	int j = 1; //Cidade a ser atribuida, a começar pela 1
 	for (int i = 1; i < A->n_cidades; i++) { //Percorrer o vetor da segunda posição até a ultima
 		if (j == cidade_inicial) j++; //Caso a cidade a ser atribuida seja a inicial, pular pra próxima
 		R->percurso[i] = j; //Atribuir a cidade
 		j++; //E passar para a próxima
 	}
+	return(R);
 }
 
 /*
@@ -126,13 +127,14 @@ void copiar_rota(rota *in, rota *out) {
 	for (int i = 0; i < in->n_cidades; i++) {
 		out->percurso[i] = in->percurso[i];
 	}
-	return(R);
+	return;
 }
 
 /*
 Retorna a distância entre dadas duas cidades
 */
 int distancia_cidades(cidades *A, int cidade_x, int cidade_y) {
+	//printf("Acessando %d %d\n", cidade_x-1, cidade_y-1);
 	return (A->matriz[cidade_x-1][cidade_y-1]);
 }
 
@@ -140,11 +142,13 @@ int distancia_cidades(cidades *A, int cidade_x, int cidade_y) {
 Retorna o tamanho da rota dada
 */
 int percorrer_rota (cidades *A, rota *R) {
-	int distancia = 0;
-	for (int cont = 1; cont <= R->n_cidades; cont++) {
+	int distancia = 0, cont;
+	for (cont = 0; cont < R->n_cidades-1; cont++) {
 		//Ir somando as distancias
+		//printf("Percorrendo %d->%d\n", R->percurso[cont], R->percurso[cont+1]);
 		distancia += distancia_cidades(A, R->percurso[cont], R->percurso[cont+1]);
 	}
+	distancia += distancia_cidades(A, R->percurso[R->n_cidades-1], R->percurso[0]);
 	
 	return(distancia);
 }
@@ -152,12 +156,11 @@ int percorrer_rota (cidades *A, rota *R) {
 /*
 Printar a rota dada, e seu tamanho
 */
-void printar_rota(rota *R) {
+void printar_rota(cidades *A, rota *R) {
 	for (int cont = 0; cont < R->n_cidades; cont++) {
-		printf("%d", R->percurso[cont]);
-		if (cont != R->n_cidades - 1)
-			printf("-");
+		printf("%d - ", R->percurso[cont]);
 	}
+	printf("%d", R->percurso[0]);
 	printf(" | %d \n", percorrer_rota(A, R));
 }
 
@@ -204,18 +207,18 @@ lista *lista_criar(){
 /*Insere um nó, com valor dado, na lista*/
 void lista_inserir(lista *L, int item){
 	no *novo = (no*) malloc(sizeof(no)); //Alocar nó
-	if(novo == NULL) return(-1);
+	if(novo == NULL) return;
 	
 	novo->num = item;
 	novo->prox = L->raiz;
 	L->raiz = novo;
-	return();
+	return;
 }
 
 /*Remove um elemento da lista encadeada*/
 void lista_remover(lista *L, int item){
 	no *aux, *atual;
-	aux = *L->raiz;
+	aux = L->raiz;
 	if(aux != NULL){
 		atual = aux->prox;
 		while(atual != NULL){
@@ -233,7 +236,7 @@ void lista_remover(lista *L, int item){
 int lista_mais_proximo(cidades *A, int origem, lista *L){
 	int menor_dist = 0, aux, menor;
 	no *destino;
-	destino = L->raiz
+	destino = L->raiz;
 	while(destino != NULL){
 		aux = distancia_cidades(A, origem, destino->num);
 		if(menor_dist == 0)menor_dist = aux;
