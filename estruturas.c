@@ -81,6 +81,18 @@ rota *alocar_rota(int n) {
 }
 
 /*
+Aloca uma rota, copia os dados de outra
+E retorna seu ponteiro
+*/
+rota *copiar_rota(rota *in) {
+	rota *R = alocar_rota(in->n_cidades);
+	for (int i = 0; i < in->n_cidades; i++) {
+		R->percurso[i] = in->percurso[i];
+	}
+	return(R);
+}
+
+/*
 Armazenamento de rota
 */
 void guardar_rota(rota *R, int in[]) {
@@ -105,7 +117,7 @@ Retorna o tamanho da rota dada
 */
 int percorrer_rota (cidades *A, rota *R) {
 	int distancia = 0;
-	for (int cont = 1; cont <= A->n_cidades; cont++) {
+	for (int cont = 1; cont <= R->n_cidades; cont++) {
 		//Ir somando as distancias
 		distancia += distancia_cidades(A, R->percurso[cont], R->percurso[cont+1]);
 	}
@@ -122,7 +134,7 @@ void printar_percurso(rota *R) {
 		if (cont != R->n_cidades - 1)
 			printf("-");
 	}
-	printf(" | %d \n", R->dist);
+	printf(" | %d \n", percorrer_rota(A, R));
 }
 
 /*
