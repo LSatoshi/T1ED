@@ -81,28 +81,30 @@ rota *alocar_rota(int n) {
 }
 
 /*
-Aloca uma rota, copia os dados de outra
-E retorna seu ponteiro
+Aloca e gera uma rota inicial, com dada cidade inicial
 */
-rota *copiar_rota(rota *in) {
-	rota *R = alocar_rota(in->n_cidades);
-	for (int i = 0; i < in->n_cidades; i++) {
-		R->percurso[i] = in->percurso[i];
+rota *gerar_rota_inicial(cidades *A, int cidade_inicial) {
+	rota *R = alocar_rota(A->n_cidades); //Alocar rota
+
+	R->percurso[0] = cidade_inicial; //Colocar cidade inicial na primeira posição
+	
+	j = 1; //Cidade a ser atribuida, a começar pela 1
+	for (int i = 1; i < A->n_cidades; i++) { //Percorrer o vetor da segunda posição até a ultima
+		if (j == cidade_inicial) j++; //Caso a cidade a ser atribuida seja a inicial, pular pra próxima
+		R->percurso[i] = j; //Atribuir a cidade
+		j++; //E passar para a próxima
 	}
-	return(R);
 }
 
 /*
-Armazenamento de rota
+Copia os dados de uma rota a outra
+E retorna seu ponteiro
 */
-void guardar_rota(rota *R, int in[]) {
-	//Copiar a rota para a struct
-	for (int cont = 0; cont < R->n_cidades; cont++)
-		R->percurso[cont] = in[cont];
-	
-	R->percurso[R->n_cidades] = in[0]; //Colocar a cidade inicial no fim
-	
-	return;
+void copiar_rota(rota *in, rota *out) {
+	for (int i = 0; i < in->n_cidades; i++) {
+		out->percurso[i] = in->percurso[i];
+	}
+	return(R);
 }
 
 /*
@@ -128,7 +130,7 @@ int percorrer_rota (cidades *A, rota *R) {
 /*
 Printar a rota dada, e seu tamanho
 */
-void printar_percurso(rota *R) {
+void printar_rota(rota *R) {
 	for (int cont = 0; cont < R->n_cidades; cont++) {
 		printf("%d", R->percurso[cont]);
 		if (cont != R->n_cidades - 1)
