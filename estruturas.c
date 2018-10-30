@@ -3,14 +3,13 @@
 
 #include "estruturas.h"
 
+//=================================================
+//Cidade
+//=================================================
 
+//Estrutura que armazena distâncias das cidades, e seu número
 struct _cidades {
 	int **matriz;
-	int n_cidades;
-};
-
-struct _rota {
-	int *percurso;
 	int n_cidades;
 };
 
@@ -58,6 +57,16 @@ int n_cidades(cidades *A) {
 	return (A->n_cidades);
 }
 
+//=================================================
+//Rota
+//=================================================
+
+//Guarda informações sobre uma rota
+struct _rota {
+	int *percurso;
+	int n_cidades;
+};
+
 
 /*
 Alocação de uma rota entre n cidades
@@ -81,28 +90,43 @@ rota *alocar_rota(int n) {
 }
 
 /*
-Aloca uma rota, copia os dados de outra
-E retorna seu ponteiro
+Aloca e importa uma rota a partir de um array
 */
-rota *copiar_rota(rota *in) {
-	rota *R = alocar_rota(in->n_cidades);
-	for (int i = 0; i < in->n_cidades; i++) {
-		R->percurso[i] = in->percurso[i];
+rota *importar_rota(cidades *A, int *in) {
+	rota *R = alocar_rota(A->n_cidades);
+	
+	for (int i = 0; i < n_cidades; i++) {
+		R->percurso[i] = in[i];
 	}
+	
 	return(R);
 }
 
 /*
-Armazenamento de rota
+Aloca e gera uma rota inicial, com dada cidade inicial
 */
-void guardar_rota(rota *R, int in[]) {
-	//Copiar a rota para a struct
-	for (int cont = 0; cont < R->n_cidades; cont++)
-		R->percurso[cont] = in[cont];
+rota *gerar_rota_inicial(cidades *A, int cidade_inicial) {
+	rota *R = alocar_rota(A->n_cidades); //Alocar rota
+
+	R->percurso[0] = cidade_inicial; //Colocar cidade inicial na primeira posição
 	
-	R->percurso[R->n_cidades] = in[0]; //Colocar a cidade inicial no fim
-	
-	return;
+	j = 1; //Cidade a ser atribuida, a começar pela 1
+	for (int i = 1; i < A->n_cidades; i++) { //Percorrer o vetor da segunda posição até a ultima
+		if (j == cidade_inicial) j++; //Caso a cidade a ser atribuida seja a inicial, pular pra próxima
+		R->percurso[i] = j; //Atribuir a cidade
+		j++; //E passar para a próxima
+	}
+}
+
+/*
+Copia os dados de uma rota a outra
+E retorna seu ponteiro
+*/
+void copiar_rota(rota *in, rota *out) {
+	for (int i = 0; i < in->n_cidades; i++) {
+		out->percurso[i] = in->percurso[i];
+	}
+	return(R);
 }
 
 /*
@@ -128,7 +152,7 @@ int percorrer_rota (cidades *A, rota *R) {
 /*
 Printar a rota dada, e seu tamanho
 */
-void printar_percurso(rota *R) {
+void printar_rota(rota *R) {
 	for (int cont = 0; cont < R->n_cidades; cont++) {
 		printf("%d", R->percurso[cont]);
 		if (cont != R->n_cidades - 1)
@@ -148,4 +172,76 @@ void troca(rota *R, int a, int b){
 		R->percurso[b] = tmp;
 	}
 }
+
+//=================================================
+//Lista encadeada (solução 2)
+//=================================================
 	
+/*
+Estruturas e funções relacionadas a solução 2,
+Que utiliza listas encadeadas para facilitar remoção
+*/
+
+/*
+Utilizamos uma lista encadeada para a segunda solução
+*/
+struct _no{
+	int num;
+	struct _no *prox;
+};
+struct _lista{
+	struct _no *raiz;
+};
+
+/*Cria uma lista encadeada, e retorna seu ponteiro*/
+lista *lista_criar(){
+	lista *L;
+	L = (lista*) malloc(sizeof(lista));
+	L->raiz = NULL;
+	return(L);
+}
+
+/*Insere um nó, com valor dado, na lista*/
+void lista_inserir(lista *L, int item){
+	no *novo = (no*) malloc(sizeof(no)); //Alocar nó
+	if(novo == NULL) return(-1);
+	
+	novo->num = item;
+	novo->prox = L->raiz;
+	L->raiz = novo;
+	return();
+}
+
+/*Remove um elemento da lista encadeada*/
+void lista_remover(lista *L, int item){
+	no *aux, *atual;
+	aux = *L->raiz;
+	if(aux != NULL){
+		atual = aux->prox;
+		while(atual != NULL){
+			aux = atual;
+			atual = atual->prox;
+			if(atual->num == item)break;
+		}
+		aux->prox = atual->prox;
+		free(atual);
+	}
+	return;	
+}
+
+/*Retorna a cidade mais próxima, de uma dada lista*/
+int lista_mais_proximo(cidades *A, int origem, lista *L){
+	int menor_dist = 0, aux, menor;
+	no *destino;
+	destino = L->raiz
+	while(destino != NULL){
+		aux = distancia_cidades(A, origem, destino->num);
+		if(menor_dist == 0)menor_dist = aux;
+		if(aux <= menor_dist){
+			menor_dist = aux;
+			menor = destino->num;
+		}
+		destino = destino->prox;
+	}
+	return(menor);
+}
