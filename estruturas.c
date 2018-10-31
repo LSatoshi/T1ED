@@ -217,25 +217,35 @@ void lista_inserir(lista *L, int item){
 
 /*Remove um elemento da lista encadeada*/
 void lista_remover(lista *L, int item){
-	no *aux, *atual;
+	no *aux, *rem;
 	aux = L->raiz;
 	if(aux != NULL){
-		atual = aux->prox;
-		while(atual != NULL){
-			aux = atual;
-			atual = atual->prox;
-			if(atual->num == item)break;
+		if(aux->num == item){
+			L->raiz = aux->prox;
+			free(aux);
+			return;
 		}
-		aux->prox = atual->prox;
-		free(atual);
+		while(aux->prox->num != item){
+			if(aux->prox != NULL){
+				aux = aux->prox;
+			}
+			else break;
+		}
+		if(aux->prox != NULL){
+			rem = aux->prox;
+			aux->prox = rem->prox;
+			free(rem);
+		}
 	}
 	return;	
 }
+
 
 /*Retorna a cidade mais próxima, de uma dada lista*/
 int lista_mais_proximo(cidades *A, int origem, lista *L){
 	int menor_dist = 0, aux, menor;
 	no *destino;
+	destino = (no*) malloc(sizeof(no));
 	destino = L->raiz;
 	while(destino != NULL){
 		aux = distancia_cidades(A, origem, destino->num);

@@ -72,17 +72,16 @@ void melhor_rota_1 (cidades *A, int cidade_inicial) {
 Printa a melhor rota, utilizando o segundo método
 */
 void melhor_rota_2(cidades *A, int cidade_inicial){
-	int i, n = n_cidades(A);
-	lista *opcoes = lista_criar();
-	int *percurso = (int*) malloc(sizeof(int)*n);
-	
+	int i, *percurso, n = n_cidades(A);
+	lista *opcoes;
+	opcoes = lista_criar();	
+	percurso = (int*) malloc(sizeof(int)*n);
 	//Inserir possiveis opções de rota
-	for(i = 0; i < n; i++){
+	for(i = 1; i <= n; i++){
 		if(i != cidade_inicial){
 			lista_inserir(opcoes, i);
 		}
 	}
-	
 	//Guardar cidade inicial
 	percurso[0] = cidade_inicial;
 	

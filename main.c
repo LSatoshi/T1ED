@@ -7,7 +7,7 @@ int main() {
 	char *arquivo; //Nome do arquivo
 	arquivo = (char*) malloc(sizeof(char)*50);
 	int modo, cidade_inicial;
-	
+	printf("Problema do Caixeiro Viajante\n");
 	printf("Digite o nome do arquivo a ser lido\n>");
 	scanf("%s", arquivo);
 	
