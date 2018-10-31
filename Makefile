@@ -1,7 +1,7 @@
 all: T1ED
 
 T1ED: main.o funcoes.o estruturas.o
-	gcc -o -T1ED main.o funcoes.o estruturas.o -lm -std=gnu99 
+	gcc -o T1ED main.o funcoes.o estruturas.o -lm -std=gnu99 
 
 estruturas.o: estruturas.c
 	gcc -o estruturas.o -c estruturas.c -g -Wall -std=gnu99 

@@ -54,9 +54,9 @@ void bf_permutacao(cidades *A, rota *R, rota *R_best, int ini, int tam, int *dis
 }
 
 /*
-Chama a função recursiva, e printa a melhor rota.
+Chama a função recursiva, e retorna a melhor rota.
 */
-void melhor_rota_1 (cidades *A, int cidade_inicial) {
+rota *melhor_rota_1 (cidades *A, int cidade_inicial) {
 	rota *R_best = alocar_rota(n_cidades(A)); //Criar uma rota vazia
 	rota *R = gerar_rota_inicial(A, cidade_inicial); //Criar uma rota inicial
 	
@@ -65,13 +65,13 @@ void melhor_rota_1 (cidades *A, int cidade_inicial) {
 	
 	bf_permutacao(A, R, R_best, 1, n_cidades(A), dist_best); //Permutar todas as rotas, e guardar em R_best a melhot
 		
-	printar_rota(A, R_best); //printar a melhor rota.
+	return(R_best);
 }
 
 /*
-Printa a melhor rota, utilizando o segundo método
+Retorna a melhor rota, utilizando o segundo método
 */
-void melhor_rota_2(cidades *A, int cidade_inicial){
+rota *melhor_rota_2(cidades *A, int cidade_inicial){
 	int i, *percurso, n = n_cidades(A);
 	lista *opcoes;
 	opcoes = lista_criar();	
@@ -95,12 +95,18 @@ void melhor_rota_2(cidades *A, int cidade_inicial){
 	//Cria um tad rota, e importa do vetor
 	rota *R_best = importar_rota(A, percurso);
 	
-	printar_rota(A, R_best);
+	return(R_best);
 }
 
-/*Resolve o problema utilizando um dos dois algoritmos*/
+/*
+Resolve o problema utilizando um dos dois algoritmos
+*/
 void resolucao(char *nome, int inicial, int modo) {
 	cidades *A = ler_arquivo(nome);
-	if (modo == 1) melhor_rota_1(A, inicial);
-	else           melhor_rota_2(A, inicial);
+	rota *R_best;
+	
+	if (modo == 1) R_best = melhor_rota_1(A, inicial);
+	else           R_best = melhor_rota_2(A, inicial);
+	
+	printar_rota(A, R_best);
 }
